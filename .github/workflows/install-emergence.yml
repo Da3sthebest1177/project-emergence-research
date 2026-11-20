@@ -1,4 +1,4 @@
-name: Project Emergence - Install and Autonomous Research
+name: Project Emergence - Research and Development
 
 on:
   workflow_dispatch:
@@ -6,21 +6,23 @@ on:
     - cron: '37 13 * * *'
 
 concurrency:
-  group: emergence-daily
+  group: project-emergence-daily
   cancel-in-progress: false
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   research:
     if: vars.EMERGENCE_PAUSED != 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
-      - name: Check out repository
+      - name: Check out current main branch
         uses: actions/checkout@v6
         with:
+          ref: main
           persist-credentials: true
 
       - name: Set up Python
@@ -28,7 +30,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Unpack installation without extra workflows
+      - name: Install a pending code upgrade (if provided)
         shell: bash
         run: |
           if [ -f emergence-lab.zip ]; then
@@ -36,23 +38,78 @@ jobs:
             rm emergence-lab.zip
           fi
 
-      - name: Test research code
+      - name: Run regression tests
         run: python -m unittest discover -s tests -v
 
-      - name: Run research cycle
+      - name: Run bounded research cycle
         env:
           EMERGENCE_API_KEY: ${{ secrets.EMERGENCE_API_KEY }}
           EMERGENCE_API_BASE: ${{ vars.EMERGENCE_API_BASE }}
           EMERGENCE_MODEL: ${{ vars.EMERGENCE_MODEL }}
         run: python -m emergence.runner
 
-      - name: Save results without changing workflows
+      - name: Save research without modifying workflows
         shell: bash
         run: |
           git config user.name 'emergence-research-bot'
           git config user.email 'emergence-research-bot@users.noreply.github.com'
           git add -A -- . ':(exclude).github/workflows/**'
           if ! git diff --cached --quiet; then
-            git commit -m 'Project Emergence: save research results'
-            git push
+            git commit -m 'Project Emergence: save research cycle'
+            git push origin HEAD:main
           fi
+
+  development:
+    needs: research
+    if: vars.EMERGENCE_PAUSED != 'true' && vars.EMERGENCE_DEV_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out new research state
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Verify research code
+        run: python -m unittest discover -s tests -v
+
+      - name: Draft bounded algorithm proposal
+        env:
+          EMERGENCE_API_KEY: ${{ secrets.EMERGENCE_API_KEY }}
+          EMERGENCE_API_BASE: ${{ vars.EMERGENCE_API_BASE }}
+          EMERGENCE_MODEL: ${{ vars.EMERGENCE_MODEL }}
+        run: python -m emergence.autodev
+
+      - name: Test generated candidate and source safety
+        shell: bash
+        run: |
+          python -m py_compile proposals/active_candidate.py
+          python -m unittest discover -s tests -v
+
+      - name: Create or update review-only pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: autonomous-development/candidate-review
+          add-paths: |
+            proposals/candidate.json
+            proposals/active_candidate.py
+            proposals/development_report.md
+          commit-message: 'Project Emergence: propose bounded algorithm variant'
+          title: 'Project Emergence: AI-reviewed candidate experiment'
+          body: |
+            Proposed by the automated research-development pipeline.
+            
+            Review `proposals/development_report.md` for metrics, limitations and proposal origin.
+            This is a bounded, template-generated algorithm proposal, NOT arbitrary AI-written code.
+            
+            Do not merge without inspecting the changes. No automatic deployments or model self-modification.
+          draft: always-true
+          delete-branch: false
