@@ -1,0 +1,26 @@
+name: Install Project Emergence Lab
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unpack supplied archive
+        run: unzip -o emergence-lab.zip
+      - name: Test entire project
+        run: python -m unittest discover -s tests -v
+      - name: Install all modules, workflows and dashboard
+        run: |
+          git config user.name 'emergence-installer'
+          git config user.email 'emergence-installer@users.noreply.github.com'
+          git rm emergence-lab.zip
+          git add -A
+          git commit -m 'Install Project Emergence Autonomous Research Lab v2.0'
+          git push
