@@ -1,6 +1,6 @@
-# Project Emergence — Research Cycle 11
+# Project Emergence — Research Cycle 12
 
-Time (UTC): 2026-11-20T05:18:57+00:00
+Time (UTC): 2026-11-20T21:30:50+00:00
 
 Engine version: 2.3.1
 
@@ -10,18 +10,18 @@ Engine version: 2.3.1
 |---|---:|
 | reactive | 25.0% |
 | memory_only | 69.3% |
-| workspace | 90.9% |
-| workspace_no_goal | 31.8% |
+| workspace | 91.7% |
+| workspace_no_goal | 31.2% |
 | workspace_small | 69.3% |
 
 ## Bounded hypothesis
 
 - Origin: AI Research Director (API)
-- Hypothesis: Increasing memory capacity to 24 will improve relational task performance by allowing the model to store more intermediate representations, thereby enhancing its ability to solve complex relational problems.
+- Hypothesis: Increasing memory capacity from 16 to 24 will improve the model’s ability to solve relational tasks, reflected in higher overall accuracy.
 - Intervention: `memory_capacity=24`
-- Unmodified workspace control: 90.9%
-- Intervened model: 99.7%
-- Difference: +8.8% (384 same-seed trials)
+- Unmodified workspace control: 91.7%
+- Intervened model: 99.0%
+- Difference: +7.3% (384 same-seed trials)
 
 ### Default workspace settings
 
@@ -40,7 +40,7 @@ Engine version: 2.3.1
 | 5 | 100.0% |
 
 - Paired slots 5 minus slots 3: +16.7%
-- Synthetic-case bootstrap 95% interval: [+13.1%, +20.0%]
+- Synthetic-case bootstrap 95% interval: [+13.5%, +19.8%]
 - Caveat: Capacity effects are expected on synthetically constructed multi-fact chains.
 
 ## Memory retention stress test (new)
@@ -59,11 +59,11 @@ Engine version: 2.3.1
 
 ## AI Critic
 
-The reported candidate accuracy (0.9974) far exceeds the control (0.9089), contradicting the hypothesis that a 24‑unit memory would only modestly improve performance. The prediction underestimated the effect size and misidentified the target metric (overall accuracy vs. relational accuracy). Moreover, the stress‑suite shows a monotonic increase with memory capacity, suggesting a systematic scaling effect rather than a specific intervention. The sample size (384 trials) is adequate, but the per‑seed results are all near perfect, raising concerns about overfitting or a ceiling effect. No statistical test is provided to confirm significance of the difference. The control configuration also differs in workspace slots and goal weight, confounding the comparison.
+The reported 7.3% accuracy gain (from 0.9166 to 0.9896) is based on a single intervention setting (memory_capacity=24) compared to a control with memory_capacity=16. However, the control configuration also differs in workspace_slots and goal_weight, which could confound the attribution of the improvement solely to memory capacity. The candidate_per_seed values show high variance (1.0 vs 0.9792), suggesting limited robustness across seeds. The stress_suite indicates that memory_capacity accuracy improves gradually with capacity, but the jump from 16 to 24 is modest (0.6667 to 0.8333) and may be influenced by other hyperparameters. Without a factorial design isolating memory capacity, the conclusion that increasing memory alone drives the observed relational task performance is speculative.
 
-Conclusion: The intervention appears to improve performance, but the magnitude and specificity of the effect are unclear. The results do not support the precise prediction and may reflect a general capacity scaling rather than a targeted relational advantage.
+Conclusion: The data suggest a positive correlation between memory capacity and overall accuracy, but the experimental design lacks sufficient controls to claim a causal effect. Further experiments with isolated parameter variations and larger sample sizes are needed to substantiate the hypothesis.
 
-Next question: What statistical tests were performed to assess the significance of the accuracy difference, and how were confounding hyperparameters controlled across the control and candidate configurations?
+Next question: How will you design a factorial experiment to isolate the effect of memory_capacity while keeping workspace_slots and goal_weight constant, and what statistical tests will you use to assess significance across seeds?
 
 ## Limitations
 
@@ -72,4 +72,4 @@ Synthetic functional tests only. Not evidence of subjective consciousness or aut
 Generated benchmarks are capacity probes, not independent intelligence assessments.
 Model dialogue, if enabled, only proposes/reviews fixed experiments; it cannot edit or execute code.
 
-Audit digest: `4fc28c920b02f2886848eec8d1c77c3a41204e61d8e29c14922c68d8037871df`
+Audit digest: `53c87be6cdd532844dc70564fb13c78cacc1dd5e2793301cd9c3723e46a62925`
