@@ -109,24 +109,41 @@ class CognitiveAgent:
             if direct:
                 return self._record(direct.value, 0.85, "Latest direct episodic fact")
             return self._record(None, 0.0, "No matching direct fact")
-        # Workspace: goal-dependent broadcast from memory into a small capacity buffer.
-        # The two-hop representation is formed from the recalled object->container link.
-        related_containers = {e.value for e in self.memory if e.subject == goal and e.relation == "inside"}
+        # Bounded goal-dependent broadcast. Candidate event relevance is determined
+        # by a reachability search through remembered `inside` facts. Only the
+        # chosen events may be used to form an answer; reachability is a selection
+        # heuristic, not a hidden reasoning path.
+        reachable = {goal}
+        for _ in range(3):
+            reachable |= {e.value for e in self.memory
+                          if e.subject in reachable and e.relation == "inside"}
         scores = []
         for ix, e in enumerate(self.memory):
-            relevant = float(e.subject == goal or e.subject in related_containers)
+            relevant = float(e.subject in reachable)
             strength = self.config.goal_weight * relevant + e.salience + (ix + 1) / (4 * max(1, len(self.memory)))
             scores.append((strength, ix, e))
         chosen = sorted(scores, key=lambda s: (-s[0], -s[1]))[:self.config.workspace_slots]
         self.workspace = [item[2] for item in chosen]
-        direct = next((e for e in reversed(self.memory) if e in self.workspace and e.subject == goal and e.relation == "located_in"), None)
+        # Direct facts take precedence over derived paths; newest direct wins.
+        direct = next((e for e in reversed(self.memory)
+                       if e in self.workspace and e.subject == goal and e.relation == "located_in"), None)
         if direct:
             return self._record(direct.value, 0.85, "Goal-selected direct fact in workspace")
-        edges = [e for e in self.workspace if e.subject == goal and e.relation == "inside"]
-        for edge in edges:
-            second = next((e for e in self.workspace if e.subject == edge.value and e.relation == "located_in"), None)
-            if second:
-                return self._record(second.value, 0.7, "Two-hop relation broadcast into workspace")
+        node = goal
+        seen = set()
+        for hops in range(1, 5):
+            if node in seen:
+                break
+            seen.add(node)
+            edge = next((e for e in reversed(self.workspace)
+                         if e.subject == node and e.relation == "inside"), None)
+            if edge is None:
+                break
+            node = edge.value
+            end = next((e for e in reversed(self.workspace)
+                        if e.subject == node and e.relation == "located_in"), None)
+            if end is not None:
+                return self._record(end.value, 0.7, f"{hops + 1}-fact relation broadcast into workspace")
         return self._record(None, 0.0, "Insufficient goal-linked evidence in workspace")
 
     def _record(self, answer: str | None, confidence: float, reason: str):

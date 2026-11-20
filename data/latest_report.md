@@ -1,38 +1,71 @@
-# Project Emergence — Research Cycle 8
+# Project Emergence — Research Cycle 9
 
-Time (UTC): 2026-11-20T04:43:43+00:00
+Time (UTC): 2026-11-20T04:57:06+00:00
+
+Engine version: 2.3.1
 
 ## Controlled synthetic evaluation
 
 | Ablation | Mean accuracy |
 |---|---:|
 | reactive | 25.0% |
-| memory_only | 70.3% |
-| workspace | 92.5% |
-| workspace_no_goal | 32.6% |
-| workspace_small | 70.3% |
+| memory_only | 70.0% |
+| workspace | 90.9% |
+| workspace_no_goal | 32.8% |
+| workspace_small | 70.0% |
 
 ## Bounded hypothesis
 
 - Origin: AI Research Director (API)
-- Hypothesis: Increasing workspace_slots will improve relational task performance by providing more simultaneous context slots for relational reasoning.
-- Intervention: `workspace_slots=5`
-- Unmodified workspace control: 92.5%
-- Intervened model: 92.5%
-- Difference: +0.0% (384 same-seed trials)
+- Hypothesis: Increasing memory capacity to 32 will enable the workspace architecture to store more intermediate representations, thereby improving its ability to solve relational tasks and raising overall accuracy.
+- Intervention: `memory_capacity=32`
+- Unmodified workspace control: 90.9%
+- Intervened model: 100.0%
+- Difference: +9.1% (384 same-seed trials)
 
-## AI Critic
+### Default workspace settings
 
-The hypothesis predicts a dramatic increase in relational accuracy from near zero to 0.5, yet the observed candidate accuracy (0.9245) is identical to the control, indicating no effect of increasing workspace_slots. The reported candidate_per_seed values are all close to the control mean, suggesting high variance but no systematic improvement. The experiment lacks a baseline with fewer slots to establish a trend, and the sample size per seed (384 trials) may be insufficient to detect subtle chan
+`memory_capacity=16`, `workspace_slots=3`, `goal_weight=3.0`
 
-Conclusion: The intervention did not produce the predicted improvement; the data show no measurable impact of increasing workspace_slots on relational task performance.
+## Workspace capacity stress test (new)
 
-Next question: What control conditions (e.g., lower workspace_slots) and task-specific metrics will you use to isolate the effect on relational reasoning?
+480 same-seed synthetic cases with multi-fact chains; all capacities use memory_capacity=32.
+
+| Workspace slots | Mean accuracy |
+|---:|---:|
+| 1 | 50.0% |
+| 2 | 66.7% |
+| 3 | 83.3% |
+| 4 | 100.0% |
+| 5 | 100.0% |
+
+- Paired slots 5 minus slots 3: +16.7%
+- Synthetic-case bootstrap 95% interval: [+13.5%, +20.0%]
+- Caveat: Capacity effects are expected on synthetically constructed multi-fact chains.
+
+## Memory retention stress test (new)
+
+480 same-seed cases with evidence followed by 0–28 distractors.
+
+| Memory capacity | Mean accuracy |
+|---:|---:|
+| 4 | 33.3% |
+| 8 | 50.0% |
+| 16 | 66.7% |
+| 24 | 83.3% |
+| 32 | 100.0% |
+
+- Caveat: An event falling out of a bounded FIFO memory is a designed capacity limit, not real-world evidence.
+
+## Provider warning
+
+Critic unavailable: HTTP 400; metrics still valid
 
 ## Limitations
 
 Synthetic functional tests only. Not evidence of subjective consciousness or autonomous agency.
 
+Generated benchmarks are capacity probes, not independent intelligence assessments.
 Model dialogue, if enabled, only proposes/reviews fixed experiments; it cannot edit or execute code.
 
-Audit digest: `8512a2df77f4d82de1ad9a9d3daeb1598c021087720bd796cfbe73976fb5c269`
+Audit digest: `1c727622719b31ae91ae41c5edc66283919e44ca2d7792e7f0939f62c73f009f`

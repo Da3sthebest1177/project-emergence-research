@@ -21,7 +21,8 @@ Be scientifically skeptical: no experimental result proves subjective experience
 controlled intervention on a fixed synthetic benchmark. Answer ONLY JSON with keys: hypothesis,
 parameter, value, prediction. Parameter must be exactly one of memory_capacity (4,8,12,16,24,32),
 workspace_slots (1,2,3,4,5), or goal_weight (0,1,2,3,4,5). No code, commands, links or personal data.
-Do not claim knowledge of real-world results. The benchmark will independently test your proposal."""
+Do not claim knowledge of real-world results. The default workspace uses memory_capacity=16, workspace_slots=3, goal_weight=3.
+NEVER propose the default value; such a no-op is rejected. The benchmark will independently test your proposal."""
 
 CRITIC = """You are an independent Research Critic. Evaluate an experiment proposal and its observed
 synthetic ablation results. Do not claim these results show consciousness. Reply ONLY JSON with
@@ -133,8 +134,13 @@ def _ask(system: str, user: str) -> dict[str, Any]:
     return _json_from_response(content)
 
 
-def propose(benchmark_summary: dict[str, Any]) -> dict[str, Any]:
-    result = _ask(DIRECTOR, "Baseline synthetic scores:\n" + json.dumps(benchmark_summary, sort_keys=True))
+def propose(benchmark_summary: dict[str, Any], stress_summary: dict[str, Any] | None = None) -> dict[str, Any]:
+    baseline = {"memory_capacity": 16, "workspace_slots": 3, "goal_weight": 3,
+                "architecture": "workspace"}
+    context = {"baseline_config": baseline, "baseline_scores": benchmark_summary,
+               "stress_suite": stress_summary or {},
+               "requirement": "Choose one NON-DEFAULT parameter value; no-op changes are rejected."}
+    result = _ask(DIRECTOR, "Experimental context:\n" + json.dumps(context, sort_keys=True))
     configuration_from_proposal(result)  # Strict allowlist validation: never run model-provided code.
     return {
         "hypothesis": str(result.get("hypothesis", ""))[:400],
@@ -148,7 +154,7 @@ def propose(benchmark_summary: dict[str, Any]) -> dict[str, Any]:
 def critique(proposal: dict[str, Any], observed: dict[str, Any]) -> dict[str, str]:
     result = _ask(CRITIC, "Proposed intervention:\n" + json.dumps(proposal) +
                   "\nObserved metrics:\n" + json.dumps(observed))
-    return {key: str(result.get(key, ""))[:500]
+    return {key: str(result.get(key, ""))[:1400]
             for key in ("critique", "conclusion", "next_question")}
 
 
