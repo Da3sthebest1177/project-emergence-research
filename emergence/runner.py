@@ -12,9 +12,10 @@ import json
 import os
 from pathlib import Path
 
-from emergence.core import Configuration, benchmark, configuration_from_proposal, deterministic_proposal
+from emergence.core import Configuration, benchmark, configuration_from_proposal, deterministic_proposal, generate_trials
 from emergence.research import enabled, propose, critique
 from emergence.stress import workspace_stress, memory_stress
+from emergence.policy_lab import PolicySpec, PolicyAgent, evaluate_policy
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -113,6 +114,30 @@ def run_cycle(data_dir: Path = DATA) -> dict:
         'candidate_per_seed': [row['accuracy'] for row in candidate_rows],
         'n_trials': len(seeds) * TRIALS_PER_SEED,
     }
+    # Only proposals MERGED into main (i.e., present in repository data) are
+    # considered here; no model-authored code is loaded or executed.
+    # The reviewed candidate is an additional experimental comparison, never
+    # a silent replacement of the fixed control architecture.
+    reviewed_policy = None
+    candidate_json = data_dir.parent / 'proposals' / 'candidate.json'
+    if candidate_json.is_file():
+        try:
+            saved = json.loads(candidate_json.read_text(encoding='utf-8'))
+            spec = PolicySpec(**saved['candidate_spec'])
+            per_seed = [evaluate_policy(generate_trials(seed, TRIALS_PER_SEED),
+                                        lambda: PolicyAgent(spec))['accuracy']
+                        for seed in seeds]
+            candidate_mean = round(sum(per_seed) / len(per_seed), 4)
+            reviewed_policy = {
+                'configuration': vars(spec), 'mean_accuracy': candidate_mean,
+                'control_accuracy': control_accuracy,
+                'difference': round(candidate_mean - control_accuracy, 4),
+                'per_seed_accuracy': per_seed,
+                'source': 'owner-reviewed merged policy specification',
+            }
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            errors.append('Merged policy cannot be evaluated: ' + type(exc).__name__)
+
     critic = None
     if api_mode == 'AI director and critic enabled':
         try:
@@ -130,6 +155,7 @@ def run_cycle(data_dir: Path = DATA) -> dict:
         'base_models': base_summary, 'proposal': proposal, 'intervention': intervention,
         'workspace_stress': ws, 'memory_stress': mem,
         'proposal_rejections': proposal_rejections,
+        'reviewed_policy': reviewed_policy,
         'critic': critic, 'ai_mode': api_mode,
         'error': '; '.join(errors) if errors else None,
         'previous_digest': old.get('previous_digest', 'genesis'),
@@ -186,6 +212,14 @@ def report_markdown(rec: dict) -> str:
               '| Memory capacity | Mean accuracy |', '|---:|---:|']
     lines += [f"| {k} | {v['accuracy']:.1%} |" for k, v in mem['capacities'].items()]
     lines += ['', f"- Caveat: {mem['limitation']}"]
+    if rec.get('reviewed_policy'):
+        rp = rec['reviewed_policy']
+        lines += ['', '## Owner-reviewed experimental policy', '',
+                  '- Additional bounded architecture variant (does not replace baseline)',
+                  f"- Control workspace: {rp['control_accuracy']:.1%}",
+                  f"- Reviewed policy: {rp['mean_accuracy']:.1%}",
+                  f"- Difference: {rp['difference']:+.1%}",
+                  '- Source: merged reviewed specification; no arbitrary generated code executed']
     if rec.get('critic'):
         lines += ['', '## AI Critic', '', rec['critic'].get('critique', ''), '',
                   'Conclusion: ' + rec['critic'].get('conclusion', ''), '',

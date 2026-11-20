@@ -12,6 +12,7 @@ import json
 import os
 from typing import Any
 from urllib import request
+from urllib.error import HTTPError
 from urllib.parse import urlsplit
 
 from emergence.core import configuration_from_proposal
@@ -108,14 +109,28 @@ def _ask(system: str, user: str) -> dict[str, Any]:
     else:
         payload["response_format"] = {"type": "json_object"}
 
-    req = request.Request(base + "/chat/completions",
-                          data=json.dumps(payload).encode("utf-8"),
-                          headers={"Authorization": "Bearer " + key,
-                                   "Content-Type": "application/json",
-                                   "User-Agent": "Project-Emergence-Autonomous-Lab/2.1"},
-                          method="POST")
-    with request.urlopen(req, timeout=35) as response:
-        raw = response.read(64_000)
+    def make_call(body: dict[str, Any]) -> bytes:
+        req = request.Request(base + "/chat/completions",
+                              data=json.dumps(body).encode("utf-8"),
+                              headers={"Authorization": "Bearer " + key,
+                                       "Content-Type": "application/json",
+                                       "User-Agent": "Project-Emergence-Autonomous-Lab/2.4"},
+                              method="POST")
+        with request.urlopen(req, timeout=45) as response:
+            return response.read(64_000)
+
+    try:
+        raw = make_call(payload)
+    except HTTPError as exc:
+        # Groq strict schema generation can reject an otherwise valid request with
+        # HTTP 400. Retry once using ordinary JSON-object mode. Never print the
+        # potentially sensitive provider response body or credentials.
+        if exc.code != 400 or not strict_groq:
+            raise
+        fallback = dict(payload)
+        fallback["response_format"] = {"type": "json_object"}
+        fallback.pop("reasoning_effort", None)
+        raw = make_call(fallback)
     try:
         parsed = json.loads(raw)
     except json.JSONDecodeError as exc:
