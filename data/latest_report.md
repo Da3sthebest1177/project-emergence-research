@@ -1,25 +1,29 @@
-# Project Emergence — Research Cycle 1
+# Project Emergence — Research Cycle 2
 
-Time (UTC): 2026-11-20T04:06:53+00:00
+Time (UTC): 2026-11-20T04:16:40+00:00
 
 ## Controlled synthetic evaluation
 
 | Ablation | Mean accuracy |
 |---|---:|
 | reactive | 25.0% |
-| memory_only | 69.0% |
-| workspace | 89.8% |
-| workspace_no_goal | 32.3% |
-| workspace_small | 69.0% |
+| memory_only | 71.4% |
+| workspace | 93.0% |
+| workspace_no_goal | 30.7% |
+| workspace_small | 71.4% |
 
 ## Bounded hypothesis
 
-- Origin: deterministic fallback (not AI-generated)
-- Hypothesis: Changing workspace_slots to 1 may change held-out performance versus the default workspace model.
-- Intervention: `workspace_slots=1`
-- Unmodified workspace control: 89.8%
-- Intervened model: 69.0%
-- Difference: -20.8% (384 same-seed trials)
+- Origin: AI Research Director (API)
+- Hypothesis: Increasing the system’s memory capacity will enable it to retain more contextual information, thereby improving performance on relational reasoning tasks.
+- Intervention: `memory_capacity=16`
+- Unmodified workspace control: 93.0%
+- Intervened model: 93.0%
+- Difference: +0.0% (384 same-seed trials)
+
+## Provider warning
+
+Critic unavailable: JSONDecodeError; metrics still valid
 
 ## Limitations
 
@@ -27,4 +31,4 @@ Synthetic functional tests only. Not evidence of subjective consciousness or aut
 
 Model dialogue, if enabled, only proposes/reviews fixed experiments; it cannot edit or execute code.
 
-Audit digest: `07b8c444c891b57dc5ca2fa431fdd35ff6ee0fe65ebfbeb202ebe47729e4fc41`
+Audit digest: `5f28aec295b7d360942f3157eaaf9370eeb07747661285a98afeb20ac7d5eb9a`
