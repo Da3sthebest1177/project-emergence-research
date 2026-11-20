@@ -1,6 +1,6 @@
-# Project Emergence — Research Cycle 10
+# Project Emergence — Research Cycle 11
 
-Time (UTC): 2026-11-20T05:10:11+00:00
+Time (UTC): 2026-11-20T05:18:57+00:00
 
 Engine version: 2.3.1
 
@@ -9,19 +9,19 @@ Engine version: 2.3.1
 | Ablation | Mean accuracy |
 |---|---:|
 | reactive | 25.0% |
-| memory_only | 69.8% |
-| workspace | 91.1% |
-| workspace_no_goal | 32.6% |
-| workspace_small | 69.8% |
+| memory_only | 69.3% |
+| workspace | 90.9% |
+| workspace_no_goal | 31.8% |
+| workspace_small | 69.3% |
 
 ## Bounded hypothesis
 
 - Origin: AI Research Director (API)
-- Hypothesis: Increasing workspace capacity will improve relational task performance by allowing simultaneous representation of multiple relational elements.
-- Intervention: `workspace_slots=5`
-- Unmodified workspace control: 91.1%
-- Intervened model: 91.1%
-- Difference: +0.0% (384 same-seed trials)
+- Hypothesis: Increasing memory capacity to 24 will improve relational task performance by allowing the model to store more intermediate representations, thereby enhancing its ability to solve complex relational problems.
+- Intervention: `memory_capacity=24`
+- Unmodified workspace control: 90.9%
+- Intervened model: 99.7%
+- Difference: +8.8% (384 same-seed trials)
 
 ### Default workspace settings
 
@@ -40,7 +40,7 @@ Engine version: 2.3.1
 | 5 | 100.0% |
 
 - Paired slots 5 minus slots 3: +16.7%
-- Synthetic-case bootstrap 95% interval: [+13.5%, +20.0%]
+- Synthetic-case bootstrap 95% interval: [+13.1%, +20.0%]
 - Caveat: Capacity effects are expected on synthetically constructed multi-fact chains.
 
 ## Memory retention stress test (new)
@@ -59,11 +59,11 @@ Engine version: 2.3.1
 
 ## AI Critic
 
-The intervention increased workspace_slots from 3 to 5, yet the overall accuracy remained unchanged (0.9115). The per‑seed accuracies show no systematic improvement; some seeds even dropped (0.875). The stress‑suite indicates that workspace capacity alone does not guarantee higher accuracy: even at capacity 5 the relational task accuracy is 1.0, but overall accuracy is still limited by other factors such as memory capacity. The prediction of a rise to ~0.95 is unsupported by the data. Confounds include unchanged memory_capacity and goal_weight, and the possibility that the task’s difficulty plateaued before reaching 5 slots. The observed variance reduction is not statistically quantified, so conclusions about stability are premature.
+The reported candidate accuracy (0.9974) far exceeds the control (0.9089), contradicting the hypothesis that a 24‑unit memory would only modestly improve performance. The prediction underestimated the effect size and misidentified the target metric (overall accuracy vs. relational accuracy). Moreover, the stress‑suite shows a monotonic increase with memory capacity, suggesting a systematic scaling effect rather than a specific intervention. The sample size (384 trials) is adequate, but the per‑seed results are all near perfect, raising concerns about overfitting or a ceiling effect. No statistical test is provided to confirm significance of the difference. The control configuration also differs in workspace slots and goal weight, confounding the comparison.
 
-Conclusion: The proposed hypothesis is not supported by the observed results; increasing workspace capacity alone did not improve relational task performance or overall accuracy.
+Conclusion: The intervention appears to improve performance, but the magnitude and specificity of the effect are unclear. The results do not support the precise prediction and may reflect a general capacity scaling rather than a targeted relational advantage.
 
-Next question: What additional parameters (e.g., memory_capacity, goal_weight) or training regimes could be varied to isolate the effect of workspace capacity on relational performance?
+Next question: What statistical tests were performed to assess the significance of the accuracy difference, and how were confounding hyperparameters controlled across the control and candidate configurations?
 
 ## Limitations
 
@@ -72,4 +72,4 @@ Synthetic functional tests only. Not evidence of subjective consciousness or aut
 Generated benchmarks are capacity probes, not independent intelligence assessments.
 Model dialogue, if enabled, only proposes/reviews fixed experiments; it cannot edit or execute code.
 
-Audit digest: `f384157761d63e126279abe9596dc4fb11917e08afd92fd1d0dfe0e45552fda2`
+Audit digest: `4fc28c920b02f2886848eec8d1c77c3a41204e61d8e29c14922c68d8037871df`

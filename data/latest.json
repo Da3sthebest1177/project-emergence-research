@@ -2,17 +2,17 @@
   "ai_mode": "AI director and critic enabled",
   "base_models": {
     "memory_only": {
-      "mean_accuracy": 0.6979,
+      "mean_accuracy": 0.6927,
       "per_seed_accuracy": [
-        0.7083,
-        0.6979,
-        0.7083,
-        0.6771
+        0.6771,
+        0.7396,
+        0.6875,
+        0.6667
       ],
       "task_accuracy": {
-        "direct": 0.9271,
+        "direct": 0.8959,
         "relational": 0.0,
-        "revision": 0.8646,
+        "revision": 0.875,
         "unknown": 1.0
       }
     },
@@ -32,77 +32,77 @@
       }
     },
     "workspace": {
-      "mean_accuracy": 0.9115,
+      "mean_accuracy": 0.9089,
       "per_seed_accuracy": [
-        0.9271,
-        0.9271,
-        0.9167,
-        0.875
+        0.8854,
+        0.9688,
+        0.8854,
+        0.8958
       ],
       "task_accuracy": {
-        "direct": 0.9271,
-        "relational": 0.8542,
-        "revision": 0.8646,
+        "direct": 0.8959,
+        "relational": 0.8646,
+        "revision": 0.875,
         "unknown": 1.0
       }
     },
     "workspace_no_goal": {
-      "mean_accuracy": 0.3255,
+      "mean_accuracy": 0.3177,
       "per_seed_accuracy": [
         0.3229,
-        0.3229,
-        0.3021,
-        0.3542
+        0.3438,
+        0.2812,
+        0.3229
       ],
       "task_accuracy": {
-        "direct": 0.1979,
-        "relational": 0.0209,
-        "revision": 0.0834,
+        "direct": 0.125,
+        "relational": 0.0417,
+        "revision": 0.1041,
         "unknown": 1.0
       }
     },
     "workspace_small": {
-      "mean_accuracy": 0.6979,
+      "mean_accuracy": 0.6927,
       "per_seed_accuracy": [
-        0.7083,
-        0.6979,
-        0.7083,
-        0.6771
+        0.6771,
+        0.7396,
+        0.6875,
+        0.6667
       ],
       "task_accuracy": {
-        "direct": 0.9271,
+        "direct": 0.8959,
         "relational": 0.0,
-        "revision": 0.8646,
+        "revision": 0.875,
         "unknown": 1.0
       }
     }
   },
   "critic": {
-    "conclusion": "The proposed hypothesis is not supported by the observed results; increasing workspace capacity alone did not improve relational task performance or overall accuracy.",
-    "critique": "The intervention increased workspace_slots from 3 to 5, yet the overall accuracy remained unchanged (0.9115). The per‑seed accuracies show no systematic improvement; some seeds even dropped (0.875). The stress‑suite indicates that workspace capacity alone does not guarantee higher accuracy: even at capacity 5 the relational task accuracy is 1.0, but overall accuracy is still limited by other factors such as memory capacity. The prediction of a rise to ~0.95 is unsupported by the data. Confounds include unchanged memory_capacity and goal_weight, and the possibility that the task’s difficulty plateaued before reaching 5 slots. The observed variance reduction is not statistically quantified, so conclusions about stability are premature.",
-    "next_question": "What additional parameters (e.g., memory_capacity, goal_weight) or training regimes could be varied to isolate the effect of workspace capacity on relational performance?"
+    "conclusion": "The intervention appears to improve performance, but the magnitude and specificity of the effect are unclear. The results do not support the precise prediction and may reflect a general capacity scaling rather than a targeted relational advantage.",
+    "critique": "The reported candidate accuracy (0.9974) far exceeds the control (0.9089), contradicting the hypothesis that a 24‑unit memory would only modestly improve performance. The prediction underestimated the effect size and misidentified the target metric (overall accuracy vs. relational accuracy). Moreover, the stress‑suite shows a monotonic increase with memory capacity, suggesting a systematic scaling effect rather than a specific intervention. The sample size (384 trials) is adequate, but the per‑seed results are all near perfect, raising concerns about overfitting or a ceiling effect. No statistical test is provided to confirm significance of the difference. The control configuration also differs in workspace slots and goal weight, confounding the comparison.",
+    "next_question": "What statistical tests were performed to assess the significance of the accuracy difference, and how were confounding hyperparameters controlled across the control and candidate configurations?"
   },
-  "cycle": 10,
-  "date_utc": "2026-11-20T05:10:11+00:00",
+  "cycle": 11,
+  "date_utc": "2026-11-20T05:18:57+00:00",
   "error": null,
   "intervention": {
-    "candidate_accuracy": 0.9115,
+    "candidate_accuracy": 0.9974,
     "candidate_per_seed": [
-      0.9271,
-      0.9271,
-      0.9167,
-      0.875
+      0.9896,
+      1.0,
+      1.0,
+      1.0
     ],
-    "control_accuracy": 0.9115,
+    "control_accuracy": 0.9089,
     "control_config": {
       "goal_weight": 3.0,
       "memory_capacity": 16,
       "workspace_slots": 3
     },
-    "difference": 0.0,
+    "difference": 0.0885,
     "n_trials": 384,
-    "parameter": "workspace_slots",
-    "value": 5
+    "parameter": "memory_capacity",
+    "value": 24
   },
   "memory_stress": {
     "capacities": {
@@ -164,28 +164,28 @@
     },
     "limitation": "An event falling out of a bounded FIFO memory is a designed capacity limit, not real-world evidence.",
     "n_cases": 480,
-    "seed": 20274640
+    "seed": 20273723
   },
-  "previous_digest": "1c727622719b31ae91ae41c5edc66283919e44ca2d7792e7f0939f62c73f009f",
+  "previous_digest": "f384157761d63e126279abe9596dc4fb11917e08afd92fd1d0dfe0e45552fda2",
   "project": "Project Emergence: bounded functional cognitive architecture testbed",
   "proposal": {
-    "hypothesis": "Increasing workspace capacity will improve relational task performance by allowing simultaneous representation of multiple relational elements.",
+    "hypothesis": "Increasing memory capacity to 24 will improve relational task performance by allowing the model to store more intermediate representations, thereby enhancing its ability to solve complex relational problems.",
     "origin": "AI Research Director (API)",
-    "parameter": "workspace_slots",
-    "prediction": "The mean accuracy on the relational task will rise from 0.8542 to approximately 0.95, while overall mean accuracy will increase from 0.9115 to about 0.95, with per‑seed variance reduced.",
-    "value": 5
+    "parameter": "memory_capacity",
+    "prediction": "The mean accuracy will rise from 0.9089 to approximately 0.8333, with a notable improvement in relational task accuracy from 0.8646 to around 0.8333, while direct and revision accuracies remain stable.",
+    "value": 24
   },
   "proposal_rejections": [],
-  "record_digest": "f384157761d63e126279abe9596dc4fb11917e08afd92fd1d0dfe0e45552fda2",
+  "record_digest": "4fc28c920b02f2886848eec8d1c77c3a41204e61d8e29c14922c68d8037871df",
   "reviewed_policy": null,
   "scientific_caveat": "Synthetic functional tests only. Not evidence of subjective consciousness or autonomous agency.",
   "seed_design": {
     "seed_rule_fixed_in_source": true,
     "seeds": [
-      20271609,
-      20271746,
-      20271883,
-      20272020
+      20272658,
+      20272795,
+      20272932,
+      20273069
     ],
     "trials_per_seed": 96
   },
@@ -251,10 +251,10 @@
     "limitation": "Capacity effects are expected on synthetically constructed multi-fact chains.",
     "n_cases": 480,
     "paired_95pct_bootstrap_ci_5_minus_3": [
-      0.1354,
+      0.1313,
       0.2
     ],
     "paired_slots_5_minus_3": 0.1667,
-    "seed": 20272800
+    "seed": 20271435
   }
 }
