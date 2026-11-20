@@ -1,0 +1,120 @@
+{
+  "ai_mode": "disabled (no valid API configuration)",
+  "base_models": {
+    "memory_only": {
+      "mean_accuracy": 0.6901,
+      "per_seed_accuracy": [
+        0.7083,
+        0.6562,
+        0.7083,
+        0.6875
+      ],
+      "task_accuracy": {
+        "direct": 0.875,
+        "relational": 0.0,
+        "revision": 0.8854,
+        "unknown": 1.0
+      }
+    },
+    "reactive": {
+      "mean_accuracy": 0.25,
+      "per_seed_accuracy": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ],
+      "task_accuracy": {
+        "direct": 0.0,
+        "relational": 0.0,
+        "revision": 0.0,
+        "unknown": 1.0
+      }
+    },
+    "workspace": {
+      "mean_accuracy": 0.8984,
+      "per_seed_accuracy": [
+        0.9167,
+        0.8646,
+        0.9167,
+        0.8958
+      ],
+      "task_accuracy": {
+        "direct": 0.875,
+        "relational": 0.8333,
+        "revision": 0.8854,
+        "unknown": 1.0
+      }
+    },
+    "workspace_no_goal": {
+      "mean_accuracy": 0.3229,
+      "per_seed_accuracy": [
+        0.3438,
+        0.3229,
+        0.2708,
+        0.3542
+      ],
+      "task_accuracy": {
+        "direct": 0.1667,
+        "relational": 0.0104,
+        "revision": 0.1146,
+        "unknown": 1.0
+      }
+    },
+    "workspace_small": {
+      "mean_accuracy": 0.6901,
+      "per_seed_accuracy": [
+        0.7083,
+        0.6562,
+        0.7083,
+        0.6875
+      ],
+      "task_accuracy": {
+        "direct": 0.875,
+        "relational": 0.0,
+        "revision": 0.8854,
+        "unknown": 1.0
+      }
+    }
+  },
+  "critic": null,
+  "cycle": 1,
+  "date_utc": "2026-11-20T04:06:53+00:00",
+  "error": null,
+  "intervention": {
+    "candidate_accuracy": 0.6901,
+    "candidate_per_seed": [
+      0.7083,
+      0.6562,
+      0.7083,
+      0.6875
+    ],
+    "control_accuracy": 0.8984,
+    "difference": -0.2083,
+    "n_trials": 384,
+    "parameter": "workspace_slots",
+    "value": 1
+  },
+  "previous_digest": "genesis",
+  "project": "Project Emergence: bounded functional cognitive architecture testbed",
+  "proposal": {
+    "hypothesis": "Changing workspace_slots to 1 may change held-out performance versus the default workspace model.",
+    "origin": "deterministic fallback (not AI-generated)",
+    "parameter": "workspace_slots",
+    "prediction": "difference versus workspace baseline; direction unknown",
+    "value": 1
+  },
+  "record_digest": "07b8c444c891b57dc5ca2fa431fdd35ff6ee0fe65ebfbeb202ebe47729e4fc41",
+  "scientific_caveat": "Synthetic functional tests only. Not evidence of subjective consciousness or autonomous agency.",
+  "seed_design": {
+    "seed_rule_fixed_in_source": true,
+    "seeds": [
+      20262168,
+      20262305,
+      20262442,
+      20262579
+    ],
+    "trials_per_seed": 96
+  },
+  "version": "2.0.0"
+}

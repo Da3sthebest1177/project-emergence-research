@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Project Emergence — Research Lab</title><style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#0c1220;color:#e8edf7}
+*{box-sizing:border-box}body{margin:0;padding:16px;max-width:760px;margin-inline:auto}header{margin:12px 0 22px}
+h1{font-size:1.6rem;margin:0 0 8px}.muted{color:#9caecb;font-size:.9rem;line-height:1.5}.tag{display:inline-block;padding:3px 9px;border-radius:99px;background:#17354a;color:#8bdef0;font-size:.8rem}
+section{border:1px solid #35465f;border-radius:14px;padding:16px;margin:14px 0;background:#151f30}h2{font-size:1.05rem;margin:0 0 12px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}input{min-width:0;flex:1 1 250px;background:#0a1421;color:white;border:1px solid #526380;border-radius:9px;padding:12px;font-size:1rem}button{background:#6db9f9;color:#071425;border:0;border-radius:9px;font-weight:700;padding:12px 18px;font-size:1rem}button:active{transform:scale(.98)}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:13px;background:#101a28;border-radius:10px;border:1px solid #2d3d55}.stat strong{font-size:1.65rem;display:block}.stat span{font-size:.75rem;color:#a2b4ce}.good{color:#8ce2b1}.bad{color:#ffb4b4}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;line-height:1.5}a{color:#92c7ff}footer{color:#98aac7;font-size:.8rem;margin-bottom:30px}
+</style></head><body>
+<header><div class="tag">Cloud research status · read only</div><h1>Project Emergence</h1><p class="muted">Autonomous Research Lab v2.0 · experimental cognitive architecture comparisons, not consciousness measurements.</p></header>
+<section><h2>Connect your public GitHub research repository</h2><div class="row"><input id="repo" placeholder="username/project-emergence-research" autocomplete="off"><button id="load">Load results</button></div><p class="muted">This only reads public research data. No passwords or API keys belong here.</p><p class="muted" id="status">Enter the repository owner/name.</p></section>
+<section><h2>Latest research cycle</h2><div class="stats"><div class="stat"><strong id="cycle">—</strong><span>Completed cycles</span></div><div class="stat"><strong id="delta">—</strong><span>Candidate vs control</span></div><div class="stat"><strong id="control">—</strong><span>Workspace accuracy</span></div><div class="stat"><strong id="candidate">—</strong><span>Intervention accuracy</span></div></div><p id="timestamp" class="muted">No loaded report yet</p></section>
+<section><h2>Research dialogue and experiment</h2><p class="muted" id="mode">—</p><pre id="hypothesis">No research cycle loaded yet.</pre><p class="muted" id="warning"></p><a id="github" href="https://github.com" target="_blank" rel="noopener noreferrer">View repository on GitHub</a></section>
+<footer>Designed for the free Hugging Face Static Space. Reads GitHub's public JSON only; cannot start or modify cloud jobs.</footer>
+<script>
+'use strict';const $=id=>document.getElementById(id);$('repo').value=localStorage.getItem('emergence_lab_repo')||'';
+function pc(x){return (Number(x)*100).toFixed(1)+'%'};
+async function load(){const name=$('repo').value.trim();if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(name)){ $('status').textContent='Use GitHub owner/repository, without a URL.';return;}
+localStorage.setItem('emergence_lab_repo',name);$('status').textContent='Loading public report…';const url='https://raw.githubusercontent.com/'+name+'/main/data/latest.json?t='+Date.now();
+try{const resp=await fetch(url,{cache:'no-store'});if(!resp.ok)throw Error('HTTP '+resp.status+' — run a research cycle first.');const d=await resp.json();
+$('status').textContent='Research status loaded.';$('cycle').textContent=d.cycle;$('delta').textContent=(d.intervention.difference>=0?'+':'')+pc(d.intervention.difference);
+$('control').textContent=pc(d.intervention.control_accuracy);$('candidate').textContent=pc(d.intervention.candidate_accuracy);
+$('timestamp').textContent='Last record: '+d.date_utc+' · '+d.intervention.n_trials+' synthetic trials';
+$('mode').textContent=d.ai_mode;$('hypothesis').textContent='Hypothesis: '+d.proposal.hypothesis+'\n\nIntervention: '+d.intervention.parameter+' = '+d.intervention.value+'\n\n'+(d.critic?'AI critic: '+d.critic.critique:'AI critic: not connected');
+$('warning').textContent=d.error||d.scientific_caveat;$('github').href='https://github.com/'+name;$('github').textContent='View research history and code on GitHub';
+}catch(e){$('status').textContent='Could not load report: '+e.message+' Verify the repo is public and the first workflow completed.';}}
+$('load').addEventListener('click',load);if($('repo').value)load();
+</script></body></html>
