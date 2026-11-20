@@ -1,26 +1,58 @@
-name: Install Project Emergence Lab
+name: Project Emergence - Install and Autonomous Research
+
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '37 13 * * *'
+
+concurrency:
+  group: emergence-daily
+  cancel-in-progress: false
+
 permissions:
   contents: write
+
 jobs:
-  install:
+  research:
+    if: vars.EMERGENCE_PAUSED != 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
-      - name: Unpack supplied archive
-        run: unzip -o emergence-lab.zip
-      - name: Test entire project
-        run: python -m unittest discover -s tests -v
-      - name: Install all modules, workflows and dashboard
+
+      - name: Unpack installation without extra workflows
+        shell: bash
         run: |
-          git config user.name 'emergence-installer'
-          git config user.email 'emergence-installer@users.noreply.github.com'
-          git rm emergence-lab.zip
-          git add -A
-          git commit -m 'Install Project Emergence Autonomous Research Lab v2.0'
-          git push
+          if [ -f emergence-lab.zip ]; then
+            unzip -oq emergence-lab.zip -x '.github/workflows/*'
+            rm emergence-lab.zip
+          fi
+
+      - name: Test research code
+        run: python -m unittest discover -s tests -v
+
+      - name: Run research cycle
+        env:
+          EMERGENCE_API_KEY: ${{ secrets.EMERGENCE_API_KEY }}
+          EMERGENCE_API_BASE: ${{ vars.EMERGENCE_API_BASE }}
+          EMERGENCE_MODEL: ${{ vars.EMERGENCE_MODEL }}
+        run: python -m emergence.runner
+
+      - name: Save results without changing workflows
+        shell: bash
+        run: |
+          git config user.name 'emergence-research-bot'
+          git config user.email 'emergence-research-bot@users.noreply.github.com'
+          git add -A -- . ':(exclude).github/workflows/**'
+          if ! git diff --cached --quiet; then
+            git commit -m 'Project Emergence: save research results'
+            git push
+          fi
