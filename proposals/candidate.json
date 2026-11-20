@@ -1,0 +1,134 @@
+{
+  "candidate_mean_accuracy": 1.0,
+  "candidate_spec": {
+    "attention_policy": "goal_diversity",
+    "goal_weight": 4,
+    "memory_capacity": 24,
+    "memory_policy": "salience",
+    "workspace_slots": 4
+  },
+  "control_mean_accuracy": 0.9062,
+  "difference": 0.0938,
+  "generated_at_utc": "2026-11-20T21:31:01+00:00",
+  "hypothesis": "Increasing memory capacity to 24 and using goal-diversity attention will improve relational task accuracy compared to the baseline configuration.",
+  "limitations": [
+    "These are synthetic tasks; differences do not imply consciousness.",
+    "Experimental policy choices are restricted to preimplemented algorithms.",
+    "This is a proposal only; it must not be auto-merged or run against secrets.",
+    "The held-out generator is related to the training/test generator; no external validity is claimed."
+  ],
+  "origin": "AI design proposal (API)",
+  "per_seed": [
+    {
+      "candidate": {
+        "accuracy": 1.0,
+        "by_task": {
+          "direct": 1.0,
+          "relational": 1.0,
+          "revision": 1.0,
+          "unknown": 1.0
+        },
+        "coverage": 0.75,
+        "false_assertions": 0
+      },
+      "control": {
+        "accuracy": 0.9062,
+        "brier_asserted": 0.0439,
+        "by_task": {
+          "direct": 0.9167,
+          "relational": 0.8333,
+          "revision": 0.875,
+          "unknown": 1.0
+        },
+        "coverage": 0.6562,
+        "false_assertion_rate": 0.0,
+        "n": 96
+      },
+      "seed": 812264
+    },
+    {
+      "candidate": {
+        "accuracy": 1.0,
+        "by_task": {
+          "direct": 1.0,
+          "relational": 1.0,
+          "revision": 1.0,
+          "unknown": 1.0
+        },
+        "coverage": 0.75,
+        "false_assertions": 0
+      },
+      "control": {
+        "accuracy": 0.8958,
+        "brier_asserted": 0.0432,
+        "by_task": {
+          "direct": 0.875,
+          "relational": 0.7917,
+          "revision": 0.9167,
+          "unknown": 1.0
+        },
+        "coverage": 0.6458,
+        "false_assertion_rate": 0.0,
+        "n": 96
+      },
+      "seed": 812665
+    },
+    {
+      "candidate": {
+        "accuracy": 1.0,
+        "by_task": {
+          "direct": 1.0,
+          "relational": 1.0,
+          "revision": 1.0,
+          "unknown": 1.0
+        },
+        "coverage": 0.75,
+        "false_assertions": 0
+      },
+      "control": {
+        "accuracy": 0.8958,
+        "brier_asserted": 0.0443,
+        "by_task": {
+          "direct": 0.875,
+          "relational": 0.8333,
+          "revision": 0.875,
+          "unknown": 1.0
+        },
+        "coverage": 0.6458,
+        "false_assertion_rate": 0.0,
+        "n": 96
+      },
+      "seed": 813066
+    },
+    {
+      "candidate": {
+        "accuracy": 1.0,
+        "by_task": {
+          "direct": 1.0,
+          "relational": 1.0,
+          "revision": 1.0,
+          "unknown": 1.0
+        },
+        "coverage": 0.75,
+        "false_assertions": 0
+      },
+      "control": {
+        "accuracy": 0.9271,
+        "brier_asserted": 0.0443,
+        "by_task": {
+          "direct": 0.9167,
+          "relational": 0.875,
+          "revision": 0.9167,
+          "unknown": 1.0
+        },
+        "coverage": 0.6771,
+        "false_assertion_rate": 0.0,
+        "n": 96
+      },
+      "seed": 813467
+    }
+  ],
+  "prediction": "Relational task accuracy will rise by at least 0.02 (e.g., from 0.8959 to \u22650.9159) relative to the baseline.",
+  "research_cycle_evaluated": 12,
+  "warnings": []
+}
