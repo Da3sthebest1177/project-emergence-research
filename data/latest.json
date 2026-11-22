@@ -1,18 +1,18 @@
 {
-  "ai_mode": "AI director and critic enabled",
+  "ai_mode": "AI director enabled; critic unavailable",
   "base_models": {
     "memory_only": {
-      "mean_accuracy": 0.6927,
+      "mean_accuracy": 0.6953,
       "per_seed_accuracy": [
         0.6979,
-        0.7188,
         0.6875,
-        0.6667
+        0.6979,
+        0.6979
       ],
       "task_accuracy": {
-        "direct": 0.9271,
+        "direct": 0.9062,
         "relational": 0.0,
-        "revision": 0.8438,
+        "revision": 0.875,
         "unknown": 1.0
       }
     },
@@ -32,77 +32,73 @@
       }
     },
     "workspace": {
-      "mean_accuracy": 0.9037,
+      "mean_accuracy": 0.9245,
       "per_seed_accuracy": [
-        0.9375,
+        0.9271,
         0.9167,
-        0.9062,
-        0.8542
+        0.9271,
+        0.9271
       ],
       "task_accuracy": {
-        "direct": 0.9271,
-        "relational": 0.8438,
-        "revision": 0.8438,
+        "direct": 0.9062,
+        "relational": 0.9167,
+        "revision": 0.875,
         "unknown": 1.0
       }
     },
     "workspace_no_goal": {
-      "mean_accuracy": 0.3307,
+      "mean_accuracy": 0.3177,
       "per_seed_accuracy": [
-        0.3438,
+        0.3125,
         0.2917,
-        0.3542,
-        0.3333
+        0.375,
+        0.2917
       ],
       "task_accuracy": {
-        "direct": 0.1771,
-        "relational": 0.0,
-        "revision": 0.1458,
+        "direct": 0.125,
+        "relational": 0.0104,
+        "revision": 0.1354,
         "unknown": 1.0
       }
     },
     "workspace_small": {
-      "mean_accuracy": 0.6927,
+      "mean_accuracy": 0.6953,
       "per_seed_accuracy": [
         0.6979,
-        0.7188,
         0.6875,
-        0.6667
+        0.6979,
+        0.6979
       ],
       "task_accuracy": {
-        "direct": 0.9271,
+        "direct": 0.9062,
         "relational": 0.0,
-        "revision": 0.8438,
+        "revision": 0.875,
         "unknown": 1.0
       }
     }
   },
-  "critic": {
-    "conclusion": "The data suggest a positive correlation between memory capacity and overall accuracy, but the experimental design lacks sufficient controls to attribute the improvement solely to memory capacity. The results are promising yet inconclusive regarding the hypothesis.",
-    "critique": "The reported improvement from 0.9037 to 0.9896 is based on a single configuration change (memory_capacity=24) compared to a control with memory_capacity=16. However, the control also differs in workspace_slots (3 vs unspecified) and goal_weight (3.0 vs unspecified), introducing confounds. The sample size of 384 trials is modest, and the candidate_per_seed values show high variance (0.9792–1.0), suggesting stochastic effects. The stress suite indicates a monotonic trend with memory capacity, but the jump from 16 to 24 yields only a 0.1666 increase, not the predicted 0.0463. Without a factorial design isolating memory_capacity, the causal claim is weak. Additionally, the prediction of 0.95 accuracy is not met; the observed 0.9896 exceeds it, raising questions about overfitting or measurement error. The metrics do not separate relational, direct, and revision tasks, so it is unclear which component drives the gain.",
-    "next_question": "What additional control conditions (e.g., varying workspace_slots or goal_weight while holding memory_capacity constant) and statistical analyses (e.g., ANOVA, confidence intervals) can be employed to isolate the effect of memory capacity on relational task performance?"
-  },
-  "cycle": 13,
-  "date_utc": "2026-11-21T20:14:23+00:00",
-  "error": null,
+  "critic": null,
+  "cycle": 14,
+  "date_utc": "2026-11-22T20:28:00+00:00",
+  "error": "Critic unavailable: HTTP 400; metrics still valid",
   "intervention": {
-    "candidate_accuracy": 0.9896,
+    "candidate_accuracy": 1.0,
     "candidate_per_seed": [
-      0.9896,
       1.0,
-      0.9792,
-      0.9896
+      1.0,
+      1.0,
+      1.0
     ],
-    "control_accuracy": 0.9037,
+    "control_accuracy": 0.9245,
     "control_config": {
       "goal_weight": 3.0,
       "memory_capacity": 16,
       "workspace_slots": 3
     },
-    "difference": 0.0859,
+    "difference": 0.0755,
     "n_trials": 384,
     "parameter": "memory_capacity",
-    "value": 24
+    "value": 32
   },
   "memory_stress": {
     "capacities": {
@@ -164,28 +160,28 @@
     },
     "limitation": "An event falling out of a bounded FIFO memory is a designed capacity limit, not real-world evidence.",
     "n_cases": 480,
-    "seed": 20271725
+    "seed": 20278900
   },
-  "previous_digest": "53c87be6cdd532844dc70564fb13c78cacc1dd5e2793301cd9c3723e46a62925",
+  "previous_digest": "5a01edd3c30c3fa15a7db452031992604e7599f52ee5e80e3c1e11ecc2d9da75",
   "project": "Project Emergence: bounded functional cognitive architecture testbed",
   "proposal": {
-    "hypothesis": "Increasing memory capacity to 24 will improve relational task performance by allowing the model to retain more intermediate representations, thereby enhancing its ability to reason over longer chains.",
+    "hypothesis": "Increasing memory capacity to 32 will enable the workspace architecture to store more intermediate representations, thereby improving relational task performance without harming direct or revision tasks.",
     "origin": "AI Research Director (API)",
     "parameter": "memory_capacity",
-    "prediction": "The mean accuracy for the workspace configuration with memory_capacity=24 will rise from 0.9037 to approximately 0.95, with relational task accuracy improving from 0.8438 to around 0.95 while maintaining high direct and revision scores.",
-    "value": 24
+    "prediction": "The mean accuracy on the relational subtask will rise from 0.9167 to at least 0.95, while direct and revision accuracies remain within ±0.02 of their current values.",
+    "value": 32
   },
   "proposal_rejections": [],
-  "record_digest": "5a01edd3c30c3fa15a7db452031992604e7599f52ee5e80e3c1e11ecc2d9da75",
+  "record_digest": "1f215481b54c4c49e4922212ac0ce745bae703280313ed49cbce4b67d6c99172",
   "reviewed_policy": null,
   "scientific_caveat": "Synthetic functional tests only. Not evidence of subjective consciousness or autonomous agency.",
   "seed_design": {
     "seed_rule_fixed_in_source": true,
     "seeds": [
-      20274756,
-      20274893,
-      20275030,
-      20275167
+      20275805,
+      20275942,
+      20276079,
+      20276216
     ],
     "trials_per_seed": 96
   },
@@ -252,9 +248,9 @@
     "n_cases": 480,
     "paired_95pct_bootstrap_ci_5_minus_3": [
       0.1354,
-      0.1979
+      0.2
     ],
     "paired_slots_5_minus_3": 0.1667,
-    "seed": 20273437
+    "seed": 20276484
   }
 }
