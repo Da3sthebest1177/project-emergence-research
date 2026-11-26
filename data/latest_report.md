@@ -1,6 +1,6 @@
-# Project Emergence — Research Cycle 17
+# Project Emergence — Research Cycle 18
 
-Time (UTC): 2026-11-25T22:44:16+00:00
+Time (UTC): 2026-11-26T22:34:00+00:00
 
 Engine version: 2.3.1
 
@@ -9,19 +9,19 @@ Engine version: 2.3.1
 | Ablation | Mean accuracy |
 |---|---:|
 | reactive | 25.0% |
-| memory_only | 67.7% |
-| workspace | 88.8% |
-| workspace_no_goal | 31.8% |
-| workspace_small | 67.7% |
+| memory_only | 71.1% |
+| workspace | 92.5% |
+| workspace_no_goal | 30.7% |
+| workspace_small | 71.1% |
 
 ## Bounded hypothesis
 
 - Origin: AI Research Director (API)
-- Hypothesis: Increasing memory capacity will enhance the system’s ability to solve relational tasks by providing more persistent context, leading to higher overall accuracy.
-- Intervention: `memory_capacity=32`
-- Unmodified workspace control: 88.8%
-- Intervened model: 100.0%
-- Difference: +11.2% (384 same-seed trials)
+- Hypothesis: Increasing memory capacity to 24 will improve overall accuracy on the benchmark by enabling the model to retain more contextual information, thereby enhancing performance on relational and revision tasks.
+- Intervention: `memory_capacity=24`
+- Unmodified workspace control: 92.5%
+- Intervened model: 99.0%
+- Difference: +6.5% (384 same-seed trials)
 
 ### Default workspace settings
 
@@ -40,7 +40,7 @@ Engine version: 2.3.1
 | 5 | 100.0% |
 
 - Paired slots 5 minus slots 3: +16.7%
-- Synthetic-case bootstrap 95% interval: [+13.3%, +20.0%]
+- Synthetic-case bootstrap 95% interval: [+13.5%, +19.8%]
 - Caveat: Capacity effects are expected on synthetically constructed multi-fact chains.
 
 ## Memory retention stress test (new)
@@ -59,11 +59,11 @@ Engine version: 2.3.1
 
 ## AI Critic
 
-The reported 1.0 accuracy across all 384 trials and all seeds suggests either a deterministic algorithm or a trivial task set, making it difficult to attribute performance gains to memory capacity alone. The control configuration differs in workspace_slots (3) and goal_weight (3.0), but the candidate configuration’s parameters are not fully specified; any change in these could confound the effect attributed to memory capacity. No statistical analysis (e.g., confidence intervals, hypothesis tests) is provided to assess whether the 0.112 difference is significant. The stress suite shows monotonic improvements with larger memory, yet the absolute gains are small and may reflect task difficulty rather than capacity. The prediction of 0.95 is exceeded, but without a baseline for relational tasks specifically, the claim that relational accuracy improves is speculative. Overall, the experiment lacks rigorous controls, statistical validation, and task-specific metrics to support the hypothesis.
+The reported improvement from 0.9245 to 0.9896 is substantial, yet the experiment lacks a proper counter‑balance: the control and candidate configurations differ not only in memory_capacity but also in workspace_slots and goal_weight, which could confound the attribution of gains to memory alone. The per‑seed results show high variance (0.9792–1.0) and a small sample size (n_trials=384) relative to the number of possible configurations, raising concerns about statistical significance. The stress suite indicates a monotonic increase in accuracy with higher memory, but the step from 16 to 24 shows only a 0.1666 rise, while the jump to 32 yields a full 0.3333 improvement; this non‑linear pattern suggests other factors (e.g., training dynamics, overfitting) may be at play. Moreover, the prediction in the hypothesis underestimates the observed accuracy, implying the model may be over‑fitting to the benchmark rather than genuinely benefiting from increased capacity.
 
-Conclusion: The data indicate a correlation between increased memory capacity and higher accuracy, but due to confounding parameter changes, deterministic outcomes, and absence of statistical evidence, the results cannot conclusively demonstrate a causal effect or generalize to relational tasks.
+Conclusion: The data suggest a positive correlation between memory capacity and benchmark accuracy, but the experimental design does not isolate memory as the causal factor. Further controlled studies varying only memory_capacity are required before claiming a causal effect.
 
-Next question: Could you provide statistical significance tests (e.g., t-test or bootstrap CI) for the accuracy difference, clarify whether workspace_slots and goal_weight were held constant, and supply task‑specific accuracy metrics for relational versus non‑relational tasks?
+Next question: What additional control experiments (e.g., varying only memory_capacity while keeping workspace_slots and goal_weight constant) have been performed to rule out confounding variables?
 
 ## Limitations
 
@@ -72,4 +72,4 @@ Synthetic functional tests only. Not evidence of subjective consciousness or aut
 Generated benchmarks are capacity probes, not independent intelligence assessments.
 Model dialogue, if enabled, only proposes/reviews fixed experiments; it cannot edit or execute code.
 
-Audit digest: `5a59059dcf2acd7a787ddedfdb5d8575f3720eda9c6510f1d963579d080c134c`
+Audit digest: `8425548a4c5720f069576e12b8efb4ad1143438df84ed1596b3486950a0fb271`

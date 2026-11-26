@@ -2,17 +2,17 @@
   "ai_mode": "AI director and critic enabled",
   "base_models": {
     "memory_only": {
-      "mean_accuracy": 0.6771,
+      "mean_accuracy": 0.7109,
       "per_seed_accuracy": [
-        0.6771,
         0.6979,
-        0.6667,
-        0.6667
+        0.6875,
+        0.7292,
+        0.7292
       ],
       "task_accuracy": {
-        "direct": 0.9062,
+        "direct": 0.9166,
         "relational": 0.0,
-        "revision": 0.8021,
+        "revision": 0.9271,
         "unknown": 1.0
       }
     },
@@ -32,77 +32,77 @@
       }
     },
     "workspace": {
-      "mean_accuracy": 0.888,
+      "mean_accuracy": 0.9245,
       "per_seed_accuracy": [
         0.8854,
-        0.9271,
-        0.8542,
-        0.8854
+        0.9167,
+        0.9479,
+        0.9479
       ],
       "task_accuracy": {
-        "direct": 0.9062,
-        "relational": 0.8438,
-        "revision": 0.8021,
+        "direct": 0.9166,
+        "relational": 0.8542,
+        "revision": 0.9271,
         "unknown": 1.0
       }
     },
     "workspace_no_goal": {
-      "mean_accuracy": 0.3177,
+      "mean_accuracy": 0.3072,
       "per_seed_accuracy": [
-        0.3542,
+        0.2812,
+        0.2812,
         0.3333,
-        0.2917,
-        0.2917
+        0.3333
       ],
       "task_accuracy": {
-        "direct": 0.1771,
-        "relational": 0.0,
-        "revision": 0.0938,
+        "direct": 0.0834,
+        "relational": 0.0521,
+        "revision": 0.0937,
         "unknown": 1.0
       }
     },
     "workspace_small": {
-      "mean_accuracy": 0.6771,
+      "mean_accuracy": 0.7109,
       "per_seed_accuracy": [
-        0.6771,
         0.6979,
-        0.6667,
-        0.6667
+        0.6875,
+        0.7292,
+        0.7292
       ],
       "task_accuracy": {
-        "direct": 0.9062,
+        "direct": 0.9166,
         "relational": 0.0,
-        "revision": 0.8021,
+        "revision": 0.9271,
         "unknown": 1.0
       }
     }
   },
   "critic": {
-    "conclusion": "The data indicate a correlation between increased memory capacity and higher accuracy, but due to confounding parameter changes, deterministic outcomes, and absence of statistical evidence, the results cannot conclusively demonstrate a causal effect or generalize to relational tasks.",
-    "critique": "The reported 1.0 accuracy across all 384 trials and all seeds suggests either a deterministic algorithm or a trivial task set, making it difficult to attribute performance gains to memory capacity alone. The control configuration differs in workspace_slots (3) and goal_weight (3.0), but the candidate configuration’s parameters are not fully specified; any change in these could confound the effect attributed to memory capacity. No statistical analysis (e.g., confidence intervals, hypothesis tests) is provided to assess whether the 0.112 difference is significant. The stress suite shows monotonic improvements with larger memory, yet the absolute gains are small and may reflect task difficulty rather than capacity. The prediction of 0.95 is exceeded, but without a baseline for relational tasks specifically, the claim that relational accuracy improves is speculative. Overall, the experiment lacks rigorous controls, statistical validation, and task-specific metrics to support the hypothesis.",
-    "next_question": "Could you provide statistical significance tests (e.g., t-test or bootstrap CI) for the accuracy difference, clarify whether workspace_slots and goal_weight were held constant, and supply task‑specific accuracy metrics for relational versus non‑relational tasks?"
+    "conclusion": "The data suggest a positive correlation between memory capacity and benchmark accuracy, but the experimental design does not isolate memory as the causal factor. Further controlled studies varying only memory_capacity are required before claiming a causal effect.",
+    "critique": "The reported improvement from 0.9245 to 0.9896 is substantial, yet the experiment lacks a proper counter‑balance: the control and candidate configurations differ not only in memory_capacity but also in workspace_slots and goal_weight, which could confound the attribution of gains to memory alone. The per‑seed results show high variance (0.9792–1.0) and a small sample size (n_trials=384) relative to the number of possible configurations, raising concerns about statistical significance. The stress suite indicates a monotonic increase in accuracy with higher memory, but the step from 16 to 24 shows only a 0.1666 rise, while the jump to 32 yields a full 0.3333 improvement; this non‑linear pattern suggests other factors (e.g., training dynamics, overfitting) may be at play. Moreover, the prediction in the hypothesis underestimates the observed accuracy, implying the model may be over‑fitting to the benchmark rather than genuinely benefiting from increased capacity.",
+    "next_question": "What additional control experiments (e.g., varying only memory_capacity while keeping workspace_slots and goal_weight constant) have been performed to rule out confounding variables?"
   },
-  "cycle": 17,
-  "date_utc": "2026-11-25T22:44:16+00:00",
+  "cycle": 18,
+  "date_utc": "2026-11-26T22:34:00+00:00",
   "error": null,
   "intervention": {
-    "candidate_accuracy": 1.0,
+    "candidate_accuracy": 0.9896,
     "candidate_per_seed": [
-      1.0,
-      1.0,
-      1.0,
+      0.9792,
+      0.9896,
+      0.9896,
       1.0
     ],
-    "control_accuracy": 0.888,
+    "control_accuracy": 0.9245,
     "control_config": {
       "goal_weight": 3.0,
       "memory_capacity": 16,
       "workspace_slots": 3
     },
-    "difference": 0.112,
+    "difference": 0.0651,
     "n_trials": 384,
     "parameter": "memory_capacity",
-    "value": 32
+    "value": 24
   },
   "memory_stress": {
     "capacities": {
@@ -164,28 +164,28 @@
     },
     "limitation": "An event falling out of a bounded FIFO memory is a designed capacity limit, not real-world evidence.",
     "n_cases": 480,
-    "seed": 20275841
+    "seed": 20283112
   },
-  "previous_digest": "08c981271f664aef7cbe40d1451d4c7300e3224afda305001b1fe6ef1048ca79",
+  "previous_digest": "5a59059dcf2acd7a787ddedfdb5d8575f3720eda9c6510f1d963579d080c134c",
   "project": "Project Emergence: bounded functional cognitive architecture testbed",
   "proposal": {
-    "hypothesis": "Increasing memory capacity will enhance the system’s ability to solve relational tasks by providing more persistent context, leading to higher overall accuracy.",
+    "hypothesis": "Increasing memory capacity to 24 will improve overall accuracy on the benchmark by enabling the model to retain more contextual information, thereby enhancing performance on relational and revision tasks.",
     "origin": "AI Research Director (API)",
     "parameter": "memory_capacity",
-    "prediction": "The mean accuracy will rise from 0.888 to approximately 0.95, with relational task accuracy approaching 0.95 and other task accuracies remaining stable or improving modestly.",
-    "value": 32
+    "prediction": "The mean accuracy will rise from 0.9245 to approximately 0.8333, with per‑seed accuracies improving proportionally, especially on relational (from 0.8542 to ~0.9) and revision (from 0.9271 to ~0.95).",
+    "value": 24
   },
   "proposal_rejections": [],
-  "record_digest": "5a59059dcf2acd7a787ddedfdb5d8575f3720eda9c6510f1d963579d080c134c",
+  "record_digest": "8425548a4c5720f069576e12b8efb4ad1143438df84ed1596b3486950a0fb271",
   "reviewed_policy": null,
   "scientific_caveat": "Synthetic functional tests only. Not evidence of subjective consciousness or autonomous agency.",
   "seed_design": {
     "seed_rule_fixed_in_source": true,
     "seeds": [
-      20278952,
-      20279089,
-      20279226,
-      20279363
+      20280001,
+      20280138,
+      20280275,
+      20280412
     ],
     "trials_per_seed": 96
   },
@@ -251,10 +251,10 @@
     "limitation": "Capacity effects are expected on synthetically constructed multi-fact chains.",
     "n_cases": 480,
     "paired_95pct_bootstrap_ci_5_minus_3": [
-      0.1333,
-      0.2
+      0.1354,
+      0.1979
     ],
     "paired_slots_5_minus_3": 0.1667,
-    "seed": 20277745
+    "seed": 20280728
   }
 }
