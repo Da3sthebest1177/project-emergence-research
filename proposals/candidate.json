@@ -1,0 +1,136 @@
+{
+  "candidate_mean_accuracy": 0.9375,
+  "candidate_spec": {
+    "attention_policy": "goal_recency",
+    "goal_weight": 3,
+    "memory_capacity": 16,
+    "memory_policy": "salience",
+    "workspace_slots": 3
+  },
+  "control_mean_accuracy": 0.9166,
+  "difference": 0.0209,
+  "generated_at_utc": "2026-11-27T22:19:26+00:00",
+  "hypothesis": "An alternative bounded policy may change task performance compared with the default.",
+  "limitations": [
+    "These are synthetic tasks; differences do not imply consciousness.",
+    "Experimental policy choices are restricted to preimplemented algorithms.",
+    "This is a proposal only; it must not be auto-merged or run against secrets.",
+    "The held-out generator is related to the training/test generator; no external validity is claimed."
+  ],
+  "origin": "deterministic fallback (not AI)",
+  "per_seed": [
+    {
+      "candidate": {
+        "accuracy": 0.9271,
+        "by_task": {
+          "direct": 0.9583,
+          "relational": 0.75,
+          "revision": 1.0,
+          "unknown": 1.0
+        },
+        "coverage": 0.6771,
+        "false_assertions": 0
+      },
+      "control": {
+        "accuracy": 0.9062,
+        "brier_asserted": 0.0429,
+        "by_task": {
+          "direct": 0.9167,
+          "relational": 0.7917,
+          "revision": 0.9167,
+          "unknown": 1.0
+        },
+        "coverage": 0.6562,
+        "false_assertion_rate": 0.0,
+        "n": 96
+      },
+      "seed": 812943
+    },
+    {
+      "candidate": {
+        "accuracy": 0.9375,
+        "by_task": {
+          "direct": 0.9583,
+          "relational": 0.7917,
+          "revision": 1.0,
+          "unknown": 1.0
+        },
+        "coverage": 0.6875,
+        "false_assertions": 0
+      },
+      "control": {
+        "accuracy": 0.9479,
+        "brier_asserted": 0.0426,
+        "by_task": {
+          "direct": 0.9583,
+          "relational": 0.8333,
+          "revision": 1.0,
+          "unknown": 1.0
+        },
+        "coverage": 0.6979,
+        "false_assertion_rate": 0.0,
+        "n": 96
+      },
+      "seed": 813344
+    },
+    {
+      "candidate": {
+        "accuracy": 0.9375,
+        "by_task": {
+          "direct": 1.0,
+          "relational": 0.8333,
+          "revision": 0.9167,
+          "unknown": 1.0
+        },
+        "coverage": 0.6875,
+        "false_assertions": 0
+      },
+      "control": {
+        "accuracy": 0.9167,
+        "brier_asserted": 0.0446,
+        "by_task": {
+          "direct": 0.875,
+          "relational": 0.875,
+          "revision": 0.9167,
+          "unknown": 1.0
+        },
+        "coverage": 0.6667,
+        "false_assertion_rate": 0.0,
+        "n": 96
+      },
+      "seed": 813745
+    },
+    {
+      "candidate": {
+        "accuracy": 0.9479,
+        "by_task": {
+          "direct": 1.0,
+          "relational": 0.8333,
+          "revision": 0.9583,
+          "unknown": 1.0
+        },
+        "coverage": 0.6979,
+        "false_assertions": 0
+      },
+      "control": {
+        "accuracy": 0.8958,
+        "brier_asserted": 0.0432,
+        "by_task": {
+          "direct": 0.9583,
+          "relational": 0.7917,
+          "revision": 0.8333,
+          "unknown": 1.0
+        },
+        "coverage": 0.6458,
+        "false_assertion_rate": 0.0,
+        "n": 96
+      },
+      "seed": 814146
+    }
+  ],
+  "prediction": "Direction is unknown; compare held-out accuracy and false assertions.",
+  "research_cycle_evaluated": 19,
+  "warnings": [
+    "AI design unavailable or invalid: ValueError"
+  ]
+}
